@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useRef, useEffect, KeyboardEvent, ChangeEvent } from "react";
 import { ToolDefinition } from "@/types/tool";
 import { createSearchEngine } from "@/lib/search";
