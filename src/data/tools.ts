@@ -97,6 +97,24 @@ function createAgeCalculator(): ToolDefinition {
       let years = today.getFullYear() - birth.getFullYear();
       let months = today.getMonth() - birth.getMonth();
       let days = today.getDate() - birth.getDate();
+      if (days < 0) {
+        months--;
+        days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+      }
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+      return { success: true, outputs: { years, months, days } };
+    },
+    formula: "Years = Current Year - Birth Year (adjusting for month/day)",
+    explanation: "Calculates the exact age in years, months, and days from a given date of birth to today's date.",
+    example: { inputs: { birthDate: "1990-01-15" }, outputs: { years: 33, months: 8, days: 19 }, description: "A person born on Jan 15, 1990 would be 33 years, 8 months, 19 days old" },
+    assumptions: ["Calculation uses local time", "Leap years are handled by the Date object"],
+    relatedTools: ["percentage-calculator", "emi-calculator"],
+    tags: ["everyday", "utility"],
+  };
+}
 // Helper to create EMI calculator
 function createEMICalculator(): ToolDefinition {
   return {
@@ -125,6 +143,18 @@ function createEMICalculator(): ToolDefinition {
       const monthlyRate = annualRate / 12 / 100;
       const months = termYears * 12;
       const emi = principal * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+      const totalPayment = emi * months;
+      const totalInterest = totalPayment - principal;
+      return { success: true, outputs: { emi, totalPayment, totalInterest } };
+    },
+    formula: "EMI = P * r * (1+r)^n / ((1+r)^n - 1), where P=principal, r=monthly rate, n=number of months",
+    explanation: "The EMI is calculated using the standard formula that accounts for the compounding interest effect over the loan tenure.",
+    example: { inputs: { principal: 500000, annualRate: 8.5, termYears: 20 }, outputs: { emi: 4338.97, totalPayment: 1041352.8, totalInterest: 541352.8 }, description: "A loan of 500,000 at 8.5% annual interest for 20 years" },
+    assumptions: ["Interest is compounded monthly", "Rate is annual percentage rate (APR)"],
+    relatedTools: ["percentage-calculator", "percentage-increase"],
+    tags: ["money", "finance"],
+  };
+}
 // Helper to create JSON formatter
 function createJSONFormatter(): ToolDefinition {
   return {

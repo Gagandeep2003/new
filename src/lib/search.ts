@@ -1,4 +1,4 @@
-import { ToolDefinition, ToolMetadata, SearchResult, SearchSuggestion, ToolCategory } from "@/types/tool";
+import { ToolMetadata, SearchResult, SearchSuggestion, ToolCategory } from "@/types/tool";
 import { Categories, getCategory } from "@/data/categories";
 
 /**
@@ -6,10 +6,10 @@ import { Categories, getCategory } from "@/data/categories";
  * and category. Fast, deterministic, and works entirely offline.
  */
 export class ToolSearch {
-  private tools: ToolDefinition[];
-  private index: Map<string, { tool: ToolDefinition; tokens: string[] }>;
+  private tools: ToolMetadata[];
+  private index: Map<string, { tool: ToolMetadata; tokens: string[] }>;
 
-  constructor(tools: ToolDefinition[]) {
+  constructor(tools: ToolMetadata[]) {
     this.tools = tools;
     this.index = new Map();
     for (const tool of tools) {
@@ -17,7 +17,7 @@ export class ToolSearch {
     }
   }
 
-  private tokenize(tool: ToolDefinition): string[] {
+  private tokenize(tool: ToolMetadata): string[] {
     const tokens = new Set<string>();
     const add = (s?: string) => {
       if (!s) return;
@@ -121,19 +121,19 @@ export class ToolSearch {
     }));
   }
 
-  getToolById(id: string): ToolDefinition | undefined {
+  getToolById(id: string): ToolMetadata | undefined {
     return this.tools.find((t) => t.id === id);
   }
 
-  getToolsByCategory(category: ToolCategory): ToolDefinition[] {
+  getToolsByCategory(category: ToolCategory): ToolMetadata[] {
     return this.tools.filter((t) => t.category === category);
   }
 
-  getAllTools(): ToolDefinition[] {
+  getAllTools(): ToolMetadata[] {
     return this.tools;
   }
 }
 
-export function createSearchEngine(tools: ToolDefinition[]): ToolSearch {
+export function createSearchEngine(tools: ToolMetadata[]): ToolSearch {
   return new ToolSearch(tools);
 }

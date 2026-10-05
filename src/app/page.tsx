@@ -6,6 +6,8 @@ import { Categories } from "@/data/categories";
 import { getAllTools } from "@/data/tools";
 
 export default async function HomePage() {
+  const allTools = getAllTools();
+  const serializableTools = allTools.map(({ calculate, ...tool }) => tool);
   const popularTools = Categories.flatMap((cat) => cat.tools).slice(0, 6);
 
   return (
@@ -23,7 +25,7 @@ export default async function HomePage() {
           <div className="max-w-2xl mx-auto mb-12">
             <SearchBox
               placeholder="What do you want to calculate, convert, check, or generate?"
-              tools={getAllTools()}
+              tools={serializableTools}
             />
           </div>
         </div>

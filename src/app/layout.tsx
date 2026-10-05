@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   description:
     "Free, instant calculators and converters for everyday problems. No login, no account, no ads by default.",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/icon.png" }],
 };
 
 export default function RootLayout({

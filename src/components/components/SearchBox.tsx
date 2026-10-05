@@ -6,14 +6,14 @@ import { Button } from "@/components/Button";
 
 interface SearchBoxProps {
   placeholder?: string;
-  tools: ToolDefinition[];
-  onSelect?: (tool: ToolDefinition) => void;
+  tools: Omit<ToolDefinition, "calculate">[];
+  onSelect?: (tool: Omit<ToolDefinition, "calculate">) => void;
   className?: string;
 }
 
 export function SearchBox({ placeholder = "Search tools...", tools, onSelect, className }: SearchBoxProps) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<ToolDefinition[]>([]);
+  const [results, setResults] = useState<Omit<ToolDefinition, "calculate">[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,7 +27,7 @@ export function SearchBox({ placeholder = "Search tools...", tools, onSelect, cl
       return;
     }
     const searchResults = searchEngine.search(query, 8);
-    setResults(searchResults.map((r) => r.tool as ToolDefinition));
+        setResults(searchResults.map((r) => r.tool as Omit<ToolDefinition, "calculate">));
     setIsOpen(true);
     setSelectedIndex(0);
   }, [query, searchEngine]);
@@ -75,7 +75,7 @@ export function SearchBox({ placeholder = "Search tools...", tools, onSelect, cl
     setSelectedIndex(0);
   };
 
-  const handleResultClick = (tool: ToolDefinition) => {
+    const handleResultClick = (tool: Omit<ToolDefinition, "calculate">) => {
     if (onSelect) onSelect(tool);
     setQuery("");
     setIsOpen(false);
@@ -126,7 +126,7 @@ export function SearchBox({ placeholder = "Search tools...", tools, onSelect, cl
       )}
       {isOpen && results.length === 0 && query.length >= 2 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-ink-200 rounded-lg shadow-lg p-4 z-50">
-          <p className="text-ink-500 text-center">No tools found for "{query}"</p>
+          <p className="text-ink-500 text-center">{`No tools found for "${query}"`}</p>
           <p className="text-sm text-ink-400 text-center mt-1">Try different keywords or browse categories</p>
         </div>
       )}
